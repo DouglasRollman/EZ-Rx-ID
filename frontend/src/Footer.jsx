@@ -3,8 +3,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from './image.jpg'; 
 
 const Footer = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  // const location = useLocation();
+  // const navigate = useNavigate();
 
   const handleDisclaimerClick = () => {
     const disclaimer = document.getElementById("disclaimer");
