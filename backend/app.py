@@ -21,33 +21,34 @@ CORS(app)  # <-- Add this line
 
 
 
-# Get the directory where this script is located
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODELS_DIR = os.path.join(BASE_DIR, "models")  # models are inside /app/models
+
 
 # --- Load models and encoders once at startup ---
 printed_model = build_binary_model()
-printed_model.load_state_dict(torch.load(os.path.join(BASE_DIR, "..", "models", "printed_model.pth"), map_location=DEVICE))
+printed_model.load_state_dict(torch.load(os.path.join(BASE_DIR, "models", "models", "printed_model.pth"), map_location=DEVICE))
 printed_model.to(DEVICE).eval()
 
 scored_model = build_binary_model()
-scored_model.load_state_dict(torch.load(os.path.join(BASE_DIR, "..", "models", "scored_model.pth"), map_location=DEVICE))
+scored_model.load_state_dict(torch.load(os.path.join(BASE_DIR, "models", "models", "scored_model.pth"), map_location=DEVICE))
 scored_model.to(DEVICE).eval()
 
-shape_labels = load_label_map(os.path.join(BASE_DIR, "..", "models", "shape_label_map.json"))
+shape_labels = load_label_map(os.path.join(BASE_DIR, "models", "shape_label_map.json"))
 shape_model = build_shape_model(len(shape_labels))
-shape_model.load_state_dict(torch.load(os.path.join(BASE_DIR, "..", "models", "shape_model.pth"), map_location=DEVICE))
+shape_model.load_state_dict(torch.load(os.path.join(BASE_DIR, "models", "shape_model.pth"), map_location=DEVICE))
 shape_model.to(DEVICE).eval()
 
 color_model = build_color_model(num_classes=12)
-color_model.load_state_dict(torch.load(os.path.join(BASE_DIR, "..", "models", "color_model.pth"), map_location=DEVICE))
+color_model.load_state_dict(torch.load(os.path.join(BASE_DIR, "models", "color_model.pth"), map_location=DEVICE))
 color_model.to(DEVICE).eval()
 
 booster_model = xgb.Booster()
-booster_model.load_model(os.path.join(BASE_DIR, "..", "models", "xgb_model.json"))
+booster_model.load_model(os.path.join(BASE_DIR, "models", "models", "xgb_model.json"))
 
-le_base = joblib.load(os.path.join(BASE_DIR, "..", "models", "label_encoder_base_filename.pkl"))
-le_shape = joblib.load(os.path.join(BASE_DIR, "..", "models", "label_encoder_shape_pred.pkl"))
-feature_columns = joblib.load(os.path.join(BASE_DIR, "..", "models", "xgb_feature_columns.pkl"))
+le_base = joblib.load(os.path.join(BASE_DIR, "models", "models", "label_encoder_base_filename.pkl"))
+le_shape = joblib.load(os.path.join(BASE_DIR, "models", "models", "label_encoder_shape_pred.pkl"))
+feature_columns = joblib.load(os.path.join(BASE_DIR, "models", "models", "xgb_feature_columns.pkl"))
 # --- API route ---
 @app.route('/predict', methods=['POST'])
 def predict():
